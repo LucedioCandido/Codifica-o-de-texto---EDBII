@@ -20,9 +20,10 @@ public class Compressor {
                 verificExistenciaLetraNoDicionario(linha_vez[i]);
             }
             linha = leitura.readLine();
+            //Identifica se existe uma nova linha, se existir, adiciona a quebra de linha a Tabela de Frequencia
             if(linha!=null){
-                int quebraLinha = 13;
-                verificExistenciaLetraNoDicionario((char)quebraLinha);
+                int quebraLinha = 13; //Número referente a quebra de linha na tabela ASCII
+                verificExistenciaLetraNoDicionario((char)quebraLinha); //Forçando o número da quebra de linha a virar um char
             }
         }
     }
