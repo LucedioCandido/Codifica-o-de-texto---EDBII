@@ -20,6 +20,10 @@ public class Compressor {
                 verificExistenciaLetraNoDicionario(linha_vez[i]);
             }
             linha = leitura.readLine();
+            if(linha!=null){
+                int quebraLinha = 13;
+                verificExistenciaLetraNoDicionario((char)quebraLinha);
+            }
         }
     }
 
