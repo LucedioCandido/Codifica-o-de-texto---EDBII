@@ -7,12 +7,14 @@ import java.util.*;
 public class Compressor {
     private Map<Character,Integer> tabelaFrequencia = new HashMap<Character, Integer>();//dicionario para a tabela de frequencia das letras no txt
     private PriorityQueue<Node> minHeap = new PriorityQueue<Node>(); //arvore de codificação
+    int tamanhoMaximo = 0; //Conta o tamanho máximo da árvore
 
     public void criaTabelaFrequencia(String entrada) throws IOException{
         File file = new File(entrada);
         FileReader input = new FileReader(file);
         BufferedReader leitura  = new BufferedReader(input);
         String linha = leitura.readLine();
+        MinHeap chaveOrdenada = new MinHeap();
 
         while(linha!=null){
             char[] linha_vez = linha.toCharArray();
@@ -26,6 +28,15 @@ public class Compressor {
                 verificExistenciaLetraNoDicionario((char)quebraLinha); //Forçando o número da quebra de linha a virar um char
             }
         }
+        chaveOrdenada.MinHeap(tamanhoMaximo); //Passa o tamanho máximo da árvore para o método minHeap
+        Set<Character> chaves = tabelaFrequencia.keySet();
+        for (Character chave : chaves) {
+            if (chave != null){
+                chaveOrdenada.insert(tabelaFrequencia.get(chave)); //Insere os caracteres na árvore
+            }
+        }
+        chaveOrdenada.minHeap(); //Inicia a ordenação do método MinHeap
+        chaveOrdenada.print(); //Imprime o MinHeap ordenado
     }
 
     public void verificExistenciaLetraNoDicionario(Character c){
@@ -33,7 +44,9 @@ public class Compressor {
             tabelaFrequencia.put(c,tabelaFrequencia.get(c).intValue()+1);
         }else{
             tabelaFrequencia.put(c,1);
+            tamanhoMaximo++; //Adiciona 1 ao tamanho máximo a cada novo nó da árvore
         }
+
     }
 
 
@@ -44,6 +57,7 @@ public class Compressor {
             Node no = new Node();
             minHeap.add(no);
         }
+
     }
 
     public void criaTabelaCodificacao(){

@@ -5,7 +5,7 @@ public class MinHeap {
 
     private static final int FRONT = 1;
 
-    public MinHeap(int tamMaximo) {
+    public void MinHeap(int tamMaximo) {
         this.tamMaximo = tamMaximo;
         this.tamanho = 0;
         tree_heap = new int[this.tamMaximo + 1];
