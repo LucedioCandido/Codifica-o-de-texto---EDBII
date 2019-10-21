@@ -15,6 +15,8 @@ public class Node {
     public Node(Node copy){
         this.letter = copy.getLetter();
         this.count = copy.getCount();
+        this.left = copy.getLeft();
+        this.right = copy.getRight();
     }
 
     public int getCount() {

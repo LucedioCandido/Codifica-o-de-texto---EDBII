@@ -34,7 +34,8 @@ public class Compressor {
         }
         criaArvoreCodificacao();//Cria a árvore de codificação
         while (minHeap.size() != 0){
-            System.out.println(minHeap.poll());
+            System.out.println(minHeap.peek().getLeft().getLeft().getLeft().toString());
+            minHeap.poll();
         }
     }
 
