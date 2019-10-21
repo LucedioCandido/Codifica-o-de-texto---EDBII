@@ -19,6 +19,22 @@ public class Node {
         return letter;
     }
 
+    public Node getLeft() {
+        return left;
+    }
+
+    public Node getRight() {
+        return right;
+    }
+
+    public void setLeft(Node left) {
+        this.left = left;
+    }
+
+    public void setRight(Node right) {
+        this.right = right;
+    }
+
     @Override
     public String toString() {
         return (char)getLetter() + " " + getCount(); //Sobrescreve o método toString e transforma o valor numerico de letter em caracter e imprime junto de seu contador

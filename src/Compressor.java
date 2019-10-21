@@ -19,6 +19,8 @@ public class Compressor {
         FileReader input = new FileReader(file);
         BufferedReader leitura  = new BufferedReader(input);
         String linha = leitura.readLine();
+        Node noEOF = new Node(03, 1);
+        minHeap.add(noEOF);
 
         while(linha!=null){
             char[] linha_vez = linha.toCharArray();
@@ -53,8 +55,15 @@ public class Compressor {
             tabelaFrequencia.get(chave);
             Node no = new Node((int)chave, tabelaFrequencia.get(chave)); //Cria um no passando o valor na tabela ASCII de chave e o valor correspondente a chave
             minHeap.add(no); //Adiciona o no criado a lista de prioridade
-    }
-
+        }
+        while(minHeap.size() <= 1){
+            Node Left = minHeap.poll();
+            Node Right = minHeap.poll();
+            Node n = new Node(0, Left.getCount()+Right.getCount());
+            n.setLeft(Left);
+            n.setRight(Right);
+            minHeap.add(n);
+        }
     }
 
     public void criaTabelaCodificacao(){
