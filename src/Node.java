@@ -3,6 +3,7 @@ public class Node {
     private int count;
     private Node left;
     private Node right;
+    private boolean root;
 
     public Node(int letra, int freq){
         this.letter = letra;
@@ -33,6 +34,14 @@ public class Node {
 
     public void setRight(Node right) {
         this.right = right;
+    }
+
+    public boolean isRoot() {
+        return root;
+    }
+
+    public void setRoot(boolean root) {
+        this.root = root;
     }
 
     @Override

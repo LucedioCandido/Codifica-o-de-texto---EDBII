@@ -19,8 +19,6 @@ public class Compressor {
         FileReader input = new FileReader(file);
         BufferedReader leitura  = new BufferedReader(input);
         String linha = leitura.readLine();
-        Node noEOF = new Node(03, 1);
-        minHeap.add(noEOF);
 
         while(linha!=null){
             char[] linha_vez = linha.toCharArray();
@@ -34,9 +32,6 @@ public class Compressor {
             }
         }
         criaArvoreCodificacao();//Cria a árvore de codificação
-        while(!minHeap.isEmpty()) {
-            System.out.println(minHeap.poll()); //Enquanto a lista não estiver vazia, chama o método toString da classe Node e imprime na tela
-        }
     }
 
     public void verificExistenciaLetraNoDicionario(Character c){
@@ -59,10 +54,18 @@ public class Compressor {
         while(minHeap.size() <= 1){
             Node Left = minHeap.poll();
             Node Right = minHeap.poll();
+            System.out.println(Left.toString());
+            System.out.println(Right.toString());
             Node n = new Node(0, Left.getCount()+Right.getCount());
+            System.out.println(n.toString());
             n.setLeft(Left);
             n.setRight(Right);
             minHeap.add(n);
+        }
+        if(minHeap.size() == 1){
+            Node raiz = minHeap.poll();
+            raiz.setRoot(true);
+            System.out.println(raiz.toString());
         }
     }
 
