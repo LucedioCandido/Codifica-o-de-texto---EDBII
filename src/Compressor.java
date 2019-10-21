@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.*;
 import java.util.PriorityQueue;
+import java.lang.Object;
 
 public class Compressor {
     private Map<Character,Integer> tabelaFrequencia = new HashMap<Character, Integer>();//dicionario para a tabela de frequencia das letras no txt
@@ -32,6 +33,9 @@ public class Compressor {
             }
         }
         criaArvoreCodificacao();//Cria a árvore de codificação
+        while (minHeap.size() != 0){
+            System.out.println(minHeap.poll());
+        }
     }
 
     public void verificExistenciaLetraNoDicionario(Character c){
@@ -51,21 +55,18 @@ public class Compressor {
             Node no = new Node((int)chave, tabelaFrequencia.get(chave)); //Cria um no passando o valor na tabela ASCII de chave e o valor correspondente a chave
             minHeap.add(no); //Adiciona o no criado a lista de prioridade
         }
-        while(minHeap.size() <= 1){
-            Node Left = minHeap.poll();
-            Node Right = minHeap.poll();
-            System.out.println(Left.toString());
-            System.out.println(Right.toString());
+        while(minHeap.size() >= 2){
+            Node Left = new Node(minHeap.poll());
+            Node Right = new Node(minHeap.poll());
             Node n = new Node(0, Left.getCount()+Right.getCount());
-            System.out.println(n.toString());
             n.setLeft(Left);
             n.setRight(Right);
             minHeap.add(n);
         }
         if(minHeap.size() == 1){
-            Node raiz = minHeap.poll();
+            Node raiz = new Node(minHeap.poll());
             raiz.setRoot(true);
-            System.out.println(raiz.toString());
+            minHeap.add(raiz);
         }
     }
 

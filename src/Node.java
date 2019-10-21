@@ -12,6 +12,11 @@ public class Node {
         this.right = null;
     }
 
+    public Node(Node copy){
+        this.letter = copy.getLetter();
+        this.count = copy.getCount();
+    }
+
     public int getCount() {
         return count;
     }
