@@ -7,6 +7,5 @@ public class Main {
 
         compress.criaTabelaFrequencia("testes/teste1.txt");
 
-        compress.print();
     }
 }
