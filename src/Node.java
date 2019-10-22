@@ -4,6 +4,8 @@ public class Node {
     private Node left;
     private Node right;
     private boolean root;
+    private boolean leaf;
+    private Node pai;
 
     public Node(int letra, int freq){
         this.letter = letra;
@@ -49,6 +51,22 @@ public class Node {
 
     public void setRoot(boolean root) {
         this.root = root;
+    }
+
+    public void setLeaf(boolean leaf) {
+        this.leaf = leaf;
+    }
+
+    public boolean isLeaf() {
+        return leaf;
+    }
+
+    public void setPai(Node pai) {
+        this.pai = pai;
+    }
+
+    public Node getPai() {
+        return pai;
     }
 
     @Override

@@ -13,7 +13,9 @@ public class Compressor {
             return Integer.valueOf(node1.getCount()).compareTo(node2.getCount());//Define prioridade do menor para o maior na lista
         }
     }); //arvore de codificação
+    private Map<Character,Integer> tabelaCodificacao = new HashMap<Character, Integer>();//Dicionário para a tabela de codificação
     private final int quebraLinha = 13; //Número referente a quebra de linha na tabela ASCII
+    public int qteLeaf = 0; //Conta a quantidade de nós folhas da árvore
 
     public void criaTabelaFrequencia(String entrada) throws IOException{
         File file = new File(entrada);
@@ -33,10 +35,7 @@ public class Compressor {
             }
         }
         criaArvoreCodificacao();//Cria a árvore de codificação
-        while (minHeap.size() != 0){
-            System.out.println(minHeap.peek().getLeft().getLeft().getLeft().toString());
-            minHeap.poll();
-        }
+        criaTabelaCodificacao(minHeap.peek());//Cria a tabela de codificação
     }
 
     public void verificExistenciaLetraNoDicionario(Character c){
@@ -48,31 +47,68 @@ public class Compressor {
 
     }
 
-
     public void criaArvoreCodificacao(){
         Set<Character> chaves = tabelaFrequencia.keySet();
         for (Character chave : chaves) {
             tabelaFrequencia.get(chave);
             Node no = new Node((int)chave, tabelaFrequencia.get(chave)); //Cria um no passando o valor na tabela ASCII de chave e o valor correspondente a chave
+            no.setLeaf(true);
             minHeap.add(no); //Adiciona o no criado a lista de prioridade
+            qteLeaf++;
         }
         while(minHeap.size() >= 2){
             Node Left = new Node(minHeap.poll());
             Node Right = new Node(minHeap.poll());
             Node n = new Node(0, Left.getCount()+Right.getCount());
+            Left.setPai(n);
+            Right.setPai(n);
             n.setLeft(Left);
             n.setRight(Right);
+            n.setRoot(true);
             minHeap.add(n);
-        }
-        if(minHeap.size() == 1){
-            Node raiz = new Node(minHeap.poll());
-            raiz.setRoot(true);
-            minHeap.add(raiz);
         }
     }
 
-    public void criaTabelaCodificacao(){
+    public void criaTabelaCodificacao(Node raiz) {
+        PriorityQueue<Node> noVisitado = new PriorityQueue<Node>(new Comparator<Node>() {
+            @Override
+            public int compare(Node node1, Node node2) {
+                return Integer.valueOf(node1.getCount()).compareTo(node2.getCount());//Define prioridade do menor para o maior na lista
+            }
+        });
+        int valorBinario = 0;
+        int iterador = 0;
+        int[] binario = new int[];
+        while (qteLeaf > 0) {
+            if (raiz.isLeaf()) {
+                qteLeaf -= 1;
+                noVisitado.add(raiz);
+                valorBinario = calculoBinario(binario);
+                tabelaCodificacao.put((char) raiz.getLetter(), valorBinario);
+            } else {
+                if (noVisitado.contains(raiz)) {
+                    criaTabelaCodificacao(raiz.getPai());
+                } else {
+                    if (noVisitado.contains(raiz.getLeft())) {
+                        binario[iterador] = 1;
+                        iterador++;
+                        criaTabelaCodificacao(raiz.getRight());
+                    } else {
+                        binario[iterador] = 0;
+                        iterador++;
+                        criaTabelaCodificacao(raiz.getLeft());
+                    }
+                }
+            }
+        }
+    }
 
+    public int calculoBinario(int[] valor){
+        int chaveBinaria = 0;
+        for(int i= valor.length; i>-1; i--){
+            chaveBinaria += (valor[i]*i);
+        }
+        return chaveBinaria;
     }
 
     public void codificaTexto(String txt) {
