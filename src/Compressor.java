@@ -7,6 +7,8 @@ import java.lang.Object;
 
 public class Compressor {
     private Map<Character,Integer> tabelaFrequencia = new HashMap<Character, Integer>();//dicionario para a tabela de frequencia das letras no txt
+    private Map<Character,String> tabelaCodificacao = new HashMap<Character, String>();
+    private String caminho =  null;
     private PriorityQueue<Node> minHeap = new PriorityQueue<Node>(new Comparator<Node>() {
         @Override
         public int compare(Node node1, Node node2) {
@@ -34,7 +36,6 @@ public class Compressor {
         }
         criaArvoreCodificacao();//Cria a árvore de codificação
         while (minHeap.size() != 0){
-            System.out.println(minHeap.peek().getLeft().getLeft().getLeft().toString());
             minHeap.poll();
         }
     }
@@ -72,20 +73,48 @@ public class Compressor {
     }
 
     public void criaTabelaCodificacao(){
+        Set<Character> chaves = tabelaFrequencia.keySet();
+        for (Character chave : chaves) {
+            caminho = getCaminho(minHeap.peek(),caminho,chave);
+            tabelaCodificacao.put(chave,caminho);
+        }
+    }
 
+    // a leitura é sempre do raiz da arvore até uma folha, a cada nova chamada raiz -> um no folha.
+    // achou a folha, remove ela e retorna o percurso. Se chegou em
+    // um no folha que não é um caracter, seta como null removendo da arvore.
+    //
+    public String getCaminho(Node raiz, String caminho, Character letter){
+
+        //se tem caminhos possíveis
+        if(raiz.getLeft()!=null){
+            caminho+="0";
+            getCaminho(raiz.getLeft(),caminho,letter);
+        }else if(raiz.getRight()!=null){
+            caminho+= "1";
+            getCaminho(raiz.getRight(),caminho,letter);
+        }
+        //a partir daqui nao tem nos a esquerda nem direita, se o no folha tem o caracter prucurado,
+        // retorna a string com o caminho e seta o nod como null; Se não for o procurado, for um nó sem caracter, remove
+        if(letter==(char)raiz.getLetter()){
+            raiz = null;
+            return caminho;
+        }else if (raiz.getLetter()==0){//0 é o nosso identificardor
+            raiz = null;
+        }
+        return null;
+    }
+
+    public void print(){
+        //aqui percorre o dicionario  com a tabela de codicação gerada
+        Set<Character> chaves = tabelaCodificacao.keySet();
+        for (Character chave : chaves) {
+            System.out.println(chave+": "+tabelaCodificacao.get(chave));
+        }
     }
 
     public void codificaTexto(String txt) {
 
-    }
-
-    public void print(){
-        Set<Character> chaves = tabelaFrequencia.keySet();
-        for (Character chave : chaves) {
-            if (chave != null){
-                System.out.println(chave + tabelaFrequencia.get(chave).toString());
-            }
-        }
     }
 
 }

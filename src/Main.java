@@ -6,6 +6,10 @@ public class Main {
         Compressor compress = new Compressor();
 
         compress.criaTabelaFrequencia("testes/teste1.txt");
+        compress.criaArvoreCodificacao();
+        compress.criaTabelaCodificacao();
+        compress.print();
+
 
     }
 }
