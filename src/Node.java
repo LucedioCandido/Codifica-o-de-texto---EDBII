@@ -4,8 +4,6 @@ public class Node {
     private Node left;
     private Node right;
     private boolean root;
-    private boolean leaf;
-    private Node pai;
 
 
 
@@ -49,32 +47,30 @@ public class Node {
         this.right = right;
     }
 
-    public boolean isRoot() {
-        return root;
-    }
-
     public void setRoot(boolean root) {
         this.root = root;
     }
 
-    public void setLeaf(boolean leaf) {
-        this.leaf = leaf;
-    }
-
-    public boolean isLeaf() {
-        return leaf;
-    }
-
-    public void setPai(Node pai) {
-        this.pai = pai;
-    }
-
-    public Node getPai() {
-        return pai;
-    }
-
+    //Sobrescreve o método toString e transforma o valor
+    // numerico de letter em caracter e imprime junto de seu contador
     @Override
     public String toString() {
-        return (char)getLetter() + " " + getCount(); //Sobrescreve o método toString e transforma o valor numerico de letter em caracter e imprime junto de seu contador
+        return (char)getLetter() + " " + getCount();
+    }
+
+    public void insert(Node node) {
+        if (node.count < this.count) {
+            if (this.left == null) {
+                this.left = node;
+            } else {
+                this.left.insert(node);
+            }
+        } else if (node.count > this.count) {
+            if (this.right == null) {
+                this.right = node;
+            } else {
+                this.right.insert(node);
+            }
+        }
     }
 }
