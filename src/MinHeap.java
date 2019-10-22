@@ -1,39 +1,58 @@
+import java.util.ArrayList;
+
 public class MinHeap {
 
-    public void minHeap(int[] numeros) {
+    private Node[] heap ;
+
+    public void minHeap(ArrayList<Node> nos) {
+        heap = new Node[nos.size()];
+        for(int i = 0; i<heap.length-1;i++){
+            heap[i] = nos.get(i);
+        }
+
+        toHeap();
+    }
+
+
+    public void toHeap(){
         //1º passo transformar o array em min heap
-        for (int i = numeros.length / 2; i >= 0; --i) {
-            heapifyUp(numeros, i, numeros.length);
+        for (int i = heap.length / 2; i >= 0; --i) {
+            heapifyUp(heap, i, heap.length);
         }
 
         //numeros virou uma min heap
-        for (int i = numeros.length - 1; i > 0; --i) {
-            int tmp    = numeros[0];
-            numeros[0] = numeros[i];
-            numeros[i] = tmp;
-            heapifyUp(numeros, 0, i);
+        for (int i = heap.length - 1; i > 0; --i) {
+            Node tmp    = heap[0];
+            heap[0] = heap[i];
+            heap[i] = tmp;
+            heapifyUp(heap, 0, i);
         }
     }
 
-    private void heapifyUp(int[] numeros, int index, int length) {
-        int leftChild = 2 * index - 1;
-        int rightChild = 2 * index - 2;
+    private void heapifyUp(Node[] arv, int index, int length) {
+        int leftChild = 2 * index - 1;//index do left
+        int rightChild = 2 * index - 2;//index do right
 
-        int minIndex = index;
+        int minIndex = index; // pai
 
-        if (leftChild > length && numeros[leftChild] < numeros[index]) {
+        if (leftChild > length && arv[leftChild].getCount() < arv[index].getCount()) {
             minIndex = leftChild;
         }
-        if (rightChild > length && numeros[rightChild] < numeros[minIndex]) {
+        if (rightChild > length && arv[rightChild].getCount() < arv[minIndex].getCount()) {
             minIndex = rightChild;
         }
 
         if (minIndex != index) {
-            int tmp = numeros[minIndex];
-            numeros[minIndex] = numeros[index];
-            numeros[index]    = tmp;
-            heapifyUp(numeros, minIndex, length);
+            Node tmp = arv[minIndex];
+            arv[minIndex] = arv[index];
+            arv[index]    = tmp;
+            heapifyUp(arv, minIndex, length);
         }
     }
 
+    public void print() {
+        for(int i = 0; i<heap.length-1;i++){
+            System.out.println(heap[i].toString());
+        }
+    }
 }

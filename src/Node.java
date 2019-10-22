@@ -7,6 +7,9 @@ public class Node {
     private boolean leaf;
     private Node pai;
 
+
+
+
     public Node(int letra, int freq){
         this.letter = letra;
         this.count = freq;
@@ -19,6 +22,7 @@ public class Node {
         this.count = copy.getCount();
         this.left = copy.getLeft();
         this.right = copy.getRight();
+
     }
 
     public int getCount() {
