@@ -9,6 +9,7 @@ public class Compressor {
     private Map<Character,Integer> tabelaFrequencia = new HashMap<Character, Integer>();//dicionario para a tabela de frequencia das letras no txt
     private Map<Character,String> tabelaCodificacao = new HashMap<Character, String>();
     private  ArvoreBinariaBusca arvore = new ArvoreBinariaBusca();
+    private ArrayList<Integer> noVisitado = new ArrayList<Integer>(); //Cria uma lista para salvar os nós já visitados
     private PriorityQueue<Node> minHeap = new PriorityQueue<Node>(new Comparator<Node>() {
         @Override
         public int compare(Node node1, Node node2) {
@@ -33,10 +34,6 @@ public class Compressor {
             if(linha!=null){
                 verificExistenciaLetraNoDicionario((char)quebraLinha); //Forçando o número da quebra de linha a virar um char
             }
-        }
-        criaArvoreCodificacao();//Cria a árvore de codificação
-        while (minHeap.size() != 0){
-            minHeap.poll();
         }
     }
 
@@ -73,7 +70,7 @@ public class Compressor {
     }
 
     public void criaTabelaCodificacao(){
-
+        noVisitado.add(500); //Adiciona um número que não pode ser letra apenas para iniciar a lista
         Set<Character> chaves = tabelaFrequencia.keySet();
         for (Character chave : chaves) {
             String caminho = ":";
@@ -85,20 +82,24 @@ public class Compressor {
     // a leitura é da raiz até uma folha, achou a folha, remove ela e retorna o percurso. Se chegou em
     // um no folha que não contém um caracter, removendo da arvore.
     public String getCaminho(Node raiz, String caminho, int letter){
-
         //se tem caminhos possíveis
         if(raiz.getLeft()!=null){
-            caminho+="0";
-            getCaminho(raiz.getLeft(),caminho,letter);
-        }else if(raiz.getRight()!=null){
-            caminho+= "1";
-            getCaminho(raiz.getRight(),caminho,letter);
+            if(!noVisitado.contains(raiz.getLeft().getLetter())){
+                caminho+="0";
+                return getCaminho(raiz.getLeft(),caminho,letter);
+            }else if(raiz.getRight()!=null) {
+                if (!noVisitado.contains(raiz.getRight().getLetter())) {
+                    caminho += "1";
+                    return getCaminho(raiz.getRight(), caminho, letter);
+                }
+            }
         }
 
         //a partir daqui nao tem nos a esquerda nem direita, se o no folha tem o caracter procurado na vez,
         // retorna a string com o caminho e remove o nod. Se não for o procurado, for um nó sem caracter, remove.
         if(letter == raiz.getLetter()){
             System.out.println();
+            noVisitado.add(raiz.getLetter());
             raiz = null;
             return caminho;
         }else if (raiz.getLetter()==0){//0 é o nosso identificardor para nós sem caracter
