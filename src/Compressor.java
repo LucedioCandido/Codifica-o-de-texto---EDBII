@@ -8,6 +8,7 @@ import java.lang.Object;
 public class Compressor {
     private Map<Character,Integer> tabelaFrequencia = new HashMap<Character, Integer>();//dicionario para a tabela de frequencia das letras no txt
     private Map<Character,String> tabelaCodificacao = new HashMap<Character, String>();
+    private Map<Character,Integer> tabelaFrequenciaOrdenada = new HashMap<Character, Integer>();
     private  ArvoreBinariaBusca arvore = new ArvoreBinariaBusca();
     private ArrayList<Integer> noVisitado = new ArrayList<Integer>(); //Cria uma lista para salvar os nós já visitados
     private PriorityQueue<Node> minHeap = new PriorityQueue<Node>(new Comparator<Node>() {
@@ -60,6 +61,12 @@ public class Compressor {
             n.setLeft(Left);
             n.setRight(Right);
             minHeap.add(n);
+            if(Left.getLetter() != 0){
+                tabelaFrequenciaOrdenada.put((char)Left.getLetter(), Left.getCount());
+            }
+            if(Right.getLetter() !=0){
+                tabelaFrequenciaOrdenada.put((char)Right.getLetter(), Right.getCount());
+            }
         }
         if(minHeap.size() == 1){
             Node raiz = new Node(minHeap.poll());
@@ -71,7 +78,7 @@ public class Compressor {
 
     public void criaTabelaCodificacao(){
         noVisitado.add(500); //Adiciona um número que não pode ser letra apenas para iniciar a lista
-        Set<Character> chaves = tabelaFrequencia.keySet();
+        Set<Character> chaves = tabelaFrequenciaOrdenada.keySet();
         for (Character chave : chaves) {
             String caminho = ":";
             caminho = getCaminho(arvore.getRoot(),caminho,chave);// elemento é a raiz da AB, a ideia era sempre percorrer a partir dela.
