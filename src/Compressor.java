@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.PriorityQueue;
 import java.lang.Object;
 
-public class Compressor {
+public class Compressor<Private> {
     private Map<Character,Integer> tabelaFrequencia = new HashMap<Character, Integer>();//dicionario para a tabela de frequencia das letras no txt
     private Map<Character,String> tabelaCodificacao = new HashMap<Character, String>();
     private Map<Character,Integer> tabelaFrequenciaOrdenada = new HashMap<Character, Integer>();
@@ -59,7 +59,9 @@ public class Compressor {
             Node Right = new Node(minHeap.poll());
             Node n = new Node(0, Left.getCount()+Right.getCount());
             n.setLeft(Left);
+            n.getLeft().setParent(n);
             n.setRight(Right);
+            n.getRight().setParent(n);
             minHeap.add(n);
             if(Left.getLetter() != 0){
                 tabelaFrequenciaOrdenada.put((char)Left.getLetter(), Left.getCount());
@@ -80,8 +82,11 @@ public class Compressor {
         noVisitado.add(500); //Adiciona um número que não pode ser letra apenas para iniciar a lista
         Set<Character> chaves = tabelaFrequenciaOrdenada.keySet();
         for (Character chave : chaves) {
-            String caminho = ":";
+            String caminho = " ";
             caminho = getCaminho(arvore.getRoot(),caminho,chave);// elemento é a raiz da AB, a ideia era sempre percorrer a partir dela.
+            if(caminho == null){
+                caminho = getCaminho(arvore.getRoot(), " ", chave);
+            }
             tabelaCodificacao.put(chave,caminho);//add na tabela de codificação o caracter e o codigo binario
         }
     }
@@ -91,28 +96,25 @@ public class Compressor {
     public String getCaminho(Node raiz, String caminho, int letter){
         //se tem caminhos possíveis
         if(raiz.getLeft()!=null){
-            if(!noVisitado.contains(raiz.getLeft().getLetter())){
-                caminho+="0";
-                return getCaminho(raiz.getLeft(),caminho,letter);
-            }else if(raiz.getRight()!=null) {
-                if (!noVisitado.contains(raiz.getRight().getLetter())) {
-                    caminho += "1";
-                    return getCaminho(raiz.getRight(), caminho, letter);
-                }
+            caminho += "0";
+            if(raiz.getLeft().getLetter() == letter){
+                raiz.setLeft(null);
+                return caminho;
+            } else {
+                return getCaminho(raiz.getLeft(), caminho, letter);
             }
+        } else if(raiz.getRight()!=null){
+            caminho += "1";
+            if(raiz.getRight().getLetter() == letter){
+                raiz.setRight(null);
+                return caminho;
+            } else {
+                return getCaminho(raiz.getRight(), caminho, letter);
+            }
+        } else{
+            raiz.setParent(null);
+            return null;
         }
-
-        //a partir daqui nao tem nos a esquerda nem direita, se o no folha tem o caracter procurado na vez,
-        // retorna a string com o caminho e remove o nod. Se não for o procurado, for um nó sem caracter, remove.
-        if(letter == raiz.getLetter()){
-            System.out.println();
-            noVisitado.add(raiz.getLetter());
-            raiz = null;
-            return caminho;
-        }else if (raiz.getLetter()==0){//0 é o nosso identificardor para nós sem caracter
-            raiz = null;
-        }
-        return null;
     }
 
     public void codificaTexto(String txt) {
@@ -124,7 +126,7 @@ public class Compressor {
         System.out.println("Tabela de codificação:");
         Set<Character> chaves = tabelaCodificacao.keySet();
         for (Character chave : chaves) {
-            System.out.println(chave+": "+tabelaCodificacao.get(chave));
+            System.out.println(chave+":"+tabelaCodificacao.get(chave));
         }
     }
 }

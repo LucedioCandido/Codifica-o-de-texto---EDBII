@@ -4,8 +4,7 @@ public class Node {
     private Node left;
     private Node right;
     private boolean root;
-
-
+    private Node parent;
 
 
     public Node(int letra, int freq){
@@ -20,6 +19,7 @@ public class Node {
         this.count = copy.getCount();
         this.left = copy.getLeft();
         this.right = copy.getRight();
+        this.parent = copy.getParent();
 
     }
 
@@ -72,5 +72,13 @@ public class Node {
                 this.right.insert(node);
             }
         }
+    }
+
+    public Node getParent() {
+        return parent;
+    }
+
+    public void setParent(Node parent){
+        this.parent = parent;
     }
 }
